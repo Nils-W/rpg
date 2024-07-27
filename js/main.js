@@ -147,7 +147,7 @@ function gotorest(){
 }
 
 //div functions 
-function showStats(){
+function showStatsPlayer(){
     hide("health",true);
     hide("mana",true);
     hide("level",true);
@@ -162,7 +162,7 @@ function showStats(){
     update();
     document.body.style.cursor = "help";
 }
-function hideStats(){
+function hideStatsPlayer(){
     hide("health",false);
     hide("mana",false);
     hide("level",false);
@@ -174,6 +174,29 @@ function hideStats(){
     hide("speed",true);
     hide("damage",true);
     hide("Armor",true);
+    update();
+    document.body.style.cursor = "default";
+}
+
+function showStatsEnemy(){
+    hide("Enemy Name",true);
+    hide("Enemy Health",true);
+    hide("Enemy Damage",true);
+
+    hide("Enemy Speed",true);
+    hide("Enemy Armor",true);
+    hide("possiblCrit",true);
+    update();
+    document.body.style.cursor = "help";
+}	
+function hideStatsEnemy(){
+    hide("Enemy Name",false);
+    hide("Enemy Health",false);
+    hide("Enemy Damage",false);
+
+    hide("Enemy Speed",false);
+    hide("Enemy Armor",false);
+    hide("possiblCrit",false);
     update();
     document.body.style.cursor = "default";
 }
