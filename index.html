@@ -22,20 +22,12 @@
       <div id="damage">Damage</div>
       <div id="Armor">Armor</div>
   </div>
-  <div class="UI-container-Enemy" id="Enemy-container" onmouseenter="showStatsEnemy()" onmouseleave="hideStatsEnemy()">
-    <div id="Enemy Name">Health</div>
-    <div id="Enemy Health">Health</div>
-    <div id="Enemy Damage">Damage</div>
-
-    <div id="Enemy Speed">Speed</div>
-    <div id="Enemy Armor">Armor</div>
-    <div id="possiblCrit">CritDamage</div>
-</div>
-  <div class="bt-container" >
+  
+  <div class="bt-container" id="bt-container" >
     <button id="initiatAttack" onclick="startFight()">Fight</button>
     <button id="attack" onclick="attack()">Attack</button>
     <button id="strongAttack" onclick="strongAttack()">Strong Attack</button>
-    <button id="heal" onclick="heal()">Heal</button>
+    <button id="dodge" onclick="dodge()">Dodge</button>
     <button id="explore" onclick="explore()">Explore</button>
     <button id="goback" onclick="goback()">Go Back</button>
     <button id="rest" onclick="gotorest()">Rest</button>
@@ -50,5 +42,12 @@
   <div class="what">
     <p id="notification"></p>
   </div>
+  <div class="UI-container-Enemy" id="test">
+    <div id="Enemy Name">Health</div>
+    <div id="Enemy Health">Health</div>
+    <div id="Enemy Damage">Damage</div>
+    <div id="Enemy Speed">Speed</div>
+    <div id="Enemy Armor">Armor</div>
+</div>
 </body>
 </html>

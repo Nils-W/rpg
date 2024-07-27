@@ -27,6 +27,7 @@
     }
     .UI-container-Enemy{
         position:relative;
+        margin-top: 2%;
         top: 2%;
         left: -25%;
         margin-left: 25%;
@@ -63,7 +64,7 @@
     
     .what{
         position: absolute;
-        top: 1.40%;
+        top:0.667%;
         width: 40%;
         height: 75%;
         background-color: white;
