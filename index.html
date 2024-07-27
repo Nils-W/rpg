@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEXT RPG</title>
+  <link href='css/main.css' rel='stylesheet'>
+  <link href='css/mobile.css' rel='stylesheet'>
+  <script src='/main.js'></script>
+</head>
+<body>
+  <div class="UI-container" onmouseenter="showStats()" onmouseleave="hideStats()">
+      <div id="health"></div>
+      <div id="mana"></div>
+      <div id="level"></div>
+      <div id="exp"></div>
+      <div id="gold"></div>
+
+      <div id="time">time</div>
+      <div id="walk">walk</div>
+      <div id="speed">Speed</div>
+      <div id="damage">Damage</div>
+      <div id="Armor">Armor</div>
+  </div>
+  <div class="UI-container-Enemy" id="Enemy-container" onmouseenter="showStatsEnemy()" onmouseleave="hideStatsEnemy()">
+    <div id="Enemy Name">Health</div>
+    <div id="Enemy Health">Health</div>
+    <div id="Enemy Damage">Damage</div>
+
+    <div id="Enemy Speed">Speed</div>
+    <div id="Enemy Armor">Armor</div>
+    <div id="possiblCrit">CritDamage</div>
+</div>
+  <div class="bt-container" >
+    <button id="initiatAttack" onclick="startFight()">Fight</button>
+    <button id="attack" onclick="attack()">Attack</button>
+    <button id="strongAttack" onclick="strongAttack()">Strong Attack</button>
+    <button id="heal" onclick="heal()">Heal</button>
+    <button id="explore" onclick="explore()">Explore</button>
+    <button id="goback" onclick="goback()">Go Back</button>
+    <button id="rest" onclick="gotorest()">Rest</button>
+    <button id="shop">Shop</button>
+    <button id="street" onclick="gotostreet()">Street</button>
+    <button id="gamble" onclick="gamble()">Gamble</button>
+    <button id="einsatzPlus" onclick="einsatzPlus()">+1 Einsatz</button>
+    <button id="einsatzMinus" onclick="einsatzMinus()">-1 Einsatz</button>
+    
+    
+  </div>
+  <div class="what">
+    <p id="notification"></p>
+  </div>
+</body>
+</html>
