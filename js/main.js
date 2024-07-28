@@ -107,7 +107,7 @@ const dialoge = [
     ]   
 // Enemy vars
 let enemyName =" Test"
-let enemyHealth = 10;
+let enemyHealth = 9999999999999;
 let enemyDamage = 1;
 let enemyExp = 10;
 let enemyGold = 10;
@@ -304,10 +304,14 @@ function attack(){
                     if (hitDamage <= 0){hitDamage = 1}
                     enemyHealth = enemyHealth- hitDamage;
                     notify("playerHit")
-                    enableButtons();
                     update();
                 },250)
+                
             }
+            setTimeout(() =>{
+                enableButtons();
+                checkFight();
+            },3500)
         },3000)
     }else{
         let temp = Random(1,10);
@@ -378,8 +382,12 @@ function attack(){
                     enableButtons();
                     update();
                 },250)
+                
             }
-            
+            setTimeout(() =>{
+                enableButtons();
+                checkFight();
+            },1000)  
         },3000)
     }
     
@@ -459,7 +467,12 @@ function strongAttack(){
                         enableButtons();
                         update();
                     },250)
+                    
                 }
+                setTimeout(() =>{
+                    enableButtons();
+                    checkFight();
+                },3500)
             }else{
                 // miss
                 setTimeout(()=>{
@@ -506,6 +519,10 @@ function strongAttack(){
                     update();
                 },250)
             }
+            setTimeout(() =>{
+                enableButtons();
+                checkFight();
+            },3500)
         }else{
             // miss
             setTimeout(()=>{
@@ -548,7 +565,10 @@ function strongAttack(){
                     update();
                 },250)
             }
-    
+            setTimeout(() =>{
+                enableButtons();
+                checkFight();
+            },3500)
         },3000)
     }
 }
@@ -618,6 +638,10 @@ function dodge(){
                     update();
                 },250)
             }
+            setTimeout(() =>{
+                enableButtons();
+                checkFight();
+            },3500)
         },3000)
     }
 }
@@ -832,7 +856,7 @@ function update(){
     if(level >=5 && menu == true){
         hide("street",false);
     }
-    checkFight();
+    
 
     // Player stuff
     document.getElementById("health").innerHTML = "Health: " +health+"/"+maxHealth;
@@ -966,7 +990,7 @@ function getEnemy(){
     }
     if(temp == 5){
         enemyName = "Orc";
-        enemyArmor = Random(5,15)
+        enemyArmor = Random(1,10)
         enemyDamage = Random(5,20)
         enemySpeed = Random(0,5)
         enemyGold = Random(15,20)
@@ -1079,8 +1103,10 @@ function checkFight(){
                 giveloot();
                 hide("goback",false)
                 hide("explore",false)
-            },2000)
+                enemyHealth = 9999999999999;
+            },4000)
         },2000)
+        
     }
 }
 
