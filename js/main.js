@@ -9,7 +9,39 @@ let secondsPlayed = 0;
 let minutesPlayed = 0;
 let hoursPlayed = 0;
 
-
+const StringOfTips = [
+    "If your level is higher you get more things, when you explore",
+    "resting is healthy!",
+    "Money = pog!",
+    "try leveling up, it really helps :)",
+    "RPG Time !!!",
+    "maybe you should train instead of resting, no?",
+    "skibidi dab dab dab yes yes...",
+    "English or Spanish",
+    "Sprich deutsch du Hurensohn ;)",
+    "Welcome Traveller",
+    "Level 5 = Gambeling overload",
+    "you can't always dodge",
+    "you are the victim",
+    "watch out where you are walking",
+    "Game does still not save progress",
+    "No sleep for devs!!!",
+    "I want my money back!...wait, I didn't spend any!",
+    "\"I'm working on it\" -Nils",
+    "Everything in one place since day one!!!",
+    "Paimon is Emergency Food",
+    "under pressure like Ocean Gate",
+    "This is not a banger...and I know bangers",
+    "I wanna press charges",
+    "I'm gonna burn your house down",
+    "When life gives you lemons, squeze them and use the fluid to drown an orphan",
+    "FABIAN",
+    "Talahon",
+    "Frankfurt",
+    "A<3",
+    "Welp we tried",
+    "Discord > Teamspeak"
+]
 
 let exploreInterval; //Interval
 let Timeplayed;
@@ -17,6 +49,7 @@ let Timeplayed;
 let walkduration = 0;  // Duration of walking
 let walkdurationtotal = 0; // Total duration of walking
 let get; // how many gold a player gets
+let tripDamage = 0;
 let exploring = false; // if player is exploring or not
 let menu = true; // if player is in menu
 let maxMoneyPossible = 10; // max gold a player can get in an action
@@ -83,19 +116,22 @@ let enemyArmor = 0;
 let dialogeNum = 0;
 
 //  Player vars
-let health = 1; // player health
+let health = 100; // player health
 let maxHealth = 100; //max health
 let mana = 20; //player mana
 let maxMana = 20; // maximum mana
 let playerDamage = 5;
 let playerSpeed = 5;
 let playerArmor = 0;
+let manaNeeded = 10;
+let manaMulti = 2;
 
 // gambeling
 let einsatz = 0;
 
 window.onload = function() {
     
+    //readcookies();
     Timeplayed = setInterval(getPlayTime, 1000);
     hide("street",true)
     update();
@@ -111,7 +147,7 @@ window.onload = function() {
     hide("dodge",true);
     // menu bts
     hide("explore",false);
-    hide("shop",false);
+    hide("shop",true);
     
 
     //explore bts
@@ -135,7 +171,7 @@ window.onload = function() {
 // button functions 
 
 function explore(){
-    
+    document.getElementById("notification").style.color = "black";
     menu = false;
     hide("explore",true);
     hide("goback",false);
@@ -167,7 +203,7 @@ function goback(){
     // menu bts
     hide("explore",false);
     hide("goback",true);
-    hide("shop",false);
+    hide("shop",true);
     hide("rest",true);
     hide("initiatAttack",true);
     tips();
@@ -200,6 +236,7 @@ function gotorest(){
     
 }
 function attack(){
+    disableButtons();
     let ASfactor = 0;
     disableButtons();
     if (enemySpeed > playerSpeed){
@@ -348,7 +385,173 @@ function attack(){
     
     
 }
-
+function strongAttack(){
+    disableButtons();
+    let ASfactor = 0;
+    disableButtons();
+    if (enemySpeed > playerSpeed){
+        let temp = Random(1,10);
+        hitDamage = Random(enemyDamage-5,enemyDamage+5)
+        if (hitDamage <= 0){hitDamage = 1}
+        if(temp == 10){
+            //crit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = ((hitDamage*2) - ASfactor)
+                    if (hitDamage <= 0){hitDamage = enemyDamage}
+                    health = health - hitDamage;
+                    notify("enemyCrit")
+                    update();
+                    enableButtons();
+                },250)
+        }else if (temp >=2 && temp <=4){
+            // miss
+                setTimeout(()=>{
+                    notify("enemyMiss")
+                    update();
+                },250)
+        }else{
+            //hit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = (hitDamage - ASfactor)
+                    if (hitDamage <= 0){hitDamage = 1}
+                    health = health - hitDamage;
+                    notify("enemyHit")
+                    enableButtons();
+                    update();
+                },250)
+        }
+        setTimeout(()=>{
+            if (mana >= manaNeeded){
+                mana = mana - manaNeeded;
+                hitDamage = Random(playerDamage*manaMulti,(playerDamage+5)*manaMulti);
+                if (hitDamage <= 0){hitDamage = 1}
+                if(temp >= 90 && temp <= 100){
+                    //crit
+                    setTimeout(()=>{
+                        ASfactor = (enemyArmor-playerSpeed)
+                        if (ASfactor <= 0){ASfactor = 0}
+                        hitDamage = ((hitDamage*2) - ASfactor)
+                        if (hitDamage <= 0){hitDamage = playerDamage}
+                        enemyHealth = enemyHealth- hitDamage;
+                        notify("playerCrit")
+                        update();
+                        enableButtons();
+                    },250)
+                }else if (temp >=1 && temp <=5){
+                    // miss
+                    setTimeout(()=>{
+                        notify("playerMiss")
+                        update();
+                    },250)
+                }else{
+                    //hit
+                    setTimeout(()=>{
+                        ASfactor = (enemyArmor-playerSpeed)
+                        if (ASfactor <= 0){ASfactor = 0}
+                        hitDamage = (hitDamage - ASfactor)
+                        if (hitDamage <= 0){hitDamage = 1}
+                        enemyHealth = enemyHealth- hitDamage;
+                        notify("playerHit")
+                        enableButtons();
+                        update();
+                    },250)
+                }
+            }else{
+                // miss
+                setTimeout(()=>{
+                    notify("noMana")
+                    update();
+                },250)
+            }
+        },3000)
+    }else{
+        let temp = Random(1,100);
+        hitDamage = Random(playerDamage-5,playerDamage+5)
+        if (mana >= manaNeeded){
+            mana = mana - manaNeeded;
+            hitDamage = Random(playerDamage*manaMulti,(playerDamage+5)*manaMulti);
+            if (hitDamage <= 0){hitDamage = 1}
+            if(temp >= 90 && temp <= 100){
+                //crit
+                setTimeout(()=>{
+                    ASfactor = (enemyArmor-playerSpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = ((hitDamage*2) - ASfactor)
+                    if (hitDamage <= 0){hitDamage = playerDamage}
+                    enemyHealth = enemyHealth- hitDamage;
+                    notify("playerCrit")
+                    update();
+                    enableButtons();
+                },250)
+            }else if (temp >=1 && temp <=5){
+                // miss
+                setTimeout(()=>{
+                    notify("playerMiss")
+                    update();
+                },250)
+            }else{
+                //hit
+                setTimeout(()=>{
+                    ASfactor = (enemyArmor-playerSpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = (hitDamage - ASfactor)
+                    if (hitDamage <= 0){hitDamage = 1}
+                    enemyHealth = enemyHealth- hitDamage;
+                    notify("playerHit")
+                    enableButtons();
+                    update();
+                },250)
+            }
+        }else{
+            // miss
+            setTimeout(()=>{
+                notify("noMana")
+                update();
+            },250)
+        }
+        setTimeout(()=>{
+            let temp = Random(1,10);
+            hitDamage = Random(enemyDamage-5,enemyDamage+5)
+            if (hitDamage <= 0){hitDamage = 1}
+            if(temp == 10){
+                //crit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = ((hitDamage*2) - ASfactor)
+                    if (hitDamage <= 0){hitDamage = enemyDamage}
+                    health = health - hitDamage;
+                    notify("enemyCrit")
+                    update();
+                    enableButtons();
+                },250)
+            }else if (temp >=2 && temp <=4){
+                // miss
+                setTimeout(()=>{
+                    notify("enemyMiss")
+                    update();
+                },250)
+            }else{
+                //hit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = (hitDamage - ASfactor)
+                    if (hitDamage <= 0){hitDamage = 1}
+                    health = health - hitDamage;
+                    notify("enemyHit")
+                    enableButtons();
+                    update();
+                },250)
+            }
+    
+        },3000)
+    }
+}
 function startFight(){
     update();
     hide("initiatAttack",true);
@@ -363,7 +566,61 @@ function startFight(){
     hide("attack",false);
     hide("dodge",false);
 }
-
+function dodge(){
+    disableButtons();
+    let ASfactor = 0;
+    let chance = 0;
+    if (playerSpeed >= enemySpeed){
+        chance = 8;
+    }else{
+        chance = 2;
+    }
+    if (Random(chance,10) <= chance){
+        setTimeout(()=>{
+            notify("dodged");
+            enableButtons();
+            update();
+        },250);
+    }else{
+        notify("failed")
+        setTimeout(()=>{
+            let temp = Random(1,10);
+            hitDamage = Random(enemyDamage-5,enemyDamage+5)
+            if (hitDamage <= 0){hitDamage = 1}
+            if(temp == 10){
+                //crit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = ((hitDamage*2) - ASfactor)
+                    if (hitDamage <= 0){hitDamage = enemyDamage}
+                    health = health - hitDamage;
+                    notify("enemyCrit")
+                    update();
+                    enableButtons();
+                },250)
+            }else if (temp >=2 && temp <=4){
+                // miss
+                setTimeout(()=>{
+                    notify("enemyMiss")
+                    update();
+                },250)
+            }else{
+                //hit
+                setTimeout(()=>{
+                    ASfactor = (playerArmor-enemySpeed)
+                    if (ASfactor <= 0){ASfactor = 0}
+                    hitDamage = (hitDamage - ASfactor)
+                    if (hitDamage <= 0){hitDamage = 1}
+                    health = health - hitDamage;
+                    notify("enemyHit")
+                    enableButtons();
+                    update();
+                },250)
+            }
+        },3000)
+    }
+}
 
 //div functions 
 function showStatsPlayer(){
@@ -404,7 +661,7 @@ function hideStatsPlayer(){
 //interval
 function Explore(){
     let happens = Random(1,100);
-    happens = 85;                               // delete later
+    //happens = 85;                               // delete later
     walkduration++
     walkdurationtotal++
     if(happens <= 30){
@@ -428,6 +685,20 @@ function Explore(){
         getEnemy();
         notify("fight");
     }
+    if(happens == 100){
+        get = Random(1000,1000+(maxMoneyPossible*10));
+        gold = gold + get;
+        notify("ruin");
+        clearInterval(exploreInterval);
+        hide("explore",false)
+    }
+    if(happens >= 51 && happens <= 61){
+        tripDamage = (Random(0,2));
+        health = health - tripDamage;
+        notify("tripped")
+        clearInterval(exploreInterval);
+        hide("explore",false)
+    }
     update();
 }
 
@@ -443,6 +714,19 @@ function notify(fall){
         string ="You found " +get+ " gold!"
         if(get == maxMoneyPossible){
             string = "You found a huge quantity of gold! to be exact " +get+ " gold!"
+        }
+        
+    }
+    if(fall == "ruin"){
+        string = "You found a ruin. You got " + get + "gold!!!"
+        if(get == (1000+(maxMoneyPossible*10))){
+            string = "You found a huge quantity of gold in the ruins! to be exact " +get+ " gold!"
+        }
+    }
+    if (fall == "tripped"){
+        string ="You tripped"
+        if(tripDamage == 0){
+            string = "You tripped, but it didn't hurt"
         }
         
     }
@@ -487,6 +771,15 @@ function notify(fall){
     if (fall == "playerCrit"){
         string = enemyName+" took a critical hit that inflicted " + (hitDamage*2) + " damage";
     }
+    if (fall == "noMana"){
+        string = "You have not enough Mana to land a blow"
+    }
+    if (fall == "dodged"){
+        string = "You dodged the Attack of the " + enemyName
+    }
+    if (fall == "failed"){
+        string = "You failed to dodge the Attack of the " + enemyName
+    }
     // Enemy
     if(fall=="enemyHit"){
         string = enemyName + " hit you. You took " + hitDamage + " damage"
@@ -497,6 +790,7 @@ function notify(fall){
     if(fall == "enemyCrit"){
         string = enemyName + " hit you. you took a critical hit that inflicted " + (hitDamage*2) + " damage"
     }
+    
     animateString(string, "notification", 25)
     
 
@@ -560,48 +854,25 @@ function update(){
     document.getElementById("Enemy Speed").innerHTML = "Speed: " +enemySpeed;
     document.getElementById("Enemy Armor").innerHTML = "Armor: " +enemyArmor;
 
-    
+    /*// COOKIES
+    setCookie("health",health);
+    setCookie("level",level);
+    setCookie("exp",exp)
+    setCookie("gold",gold)
+    setCookie("maxhealth",maxHealth)
+    setCookie("mana",mana)
+    setCookie("maxMana",maxMana)
+    set
+    */
 }
 function tips(){
-    console.log("Tips");
     document.getElementById("notification").innerHTML = " ";
     if(menu == true){
     let string = " ";
-    let wow = 10;
-    wow = Random(1,10);
-    console.log(wow);
-    if(wow == 1){
-        string = "If your level is higher you get more things, when you explore";
-    }
-    if(wow == 2){
-        string = "resting is healthy!";
-    }
-    if(wow == 3){
-        string = "Money = pog!";
-    }
-    if(wow == 4){
-        string = "try leveling up, it really helps :)";
-    }
-    if(wow == 5){
-        string = "RPG Time !!!";
-    }
-    if(wow == 6){
-        string = "maybe you should train instead of resting, no?";
-    }
-    if(wow == 7){
-        string = "skibidi dab dab dab yes yes...";
-    }
-    if(wow == 8){
-        string = "English or Spanish";
-    }
-    if(wow == 9){
-        string = "Sprich deutsch du Hurensohn ;)";
-    }
-    if(wow == 10){
-        string = "Welcome Traveller";
-    }
+    let wow = 0;
+    wow = Random(0,StringOfTips.length);
+    string = StringOfTips[wow]
     animateString(string, "notification", 25)
-    
     }
 }
 function disableButtons() {
@@ -792,6 +1063,23 @@ function checkFight(){
             },5000)
         },2000)
     }
+    if(enemyHealth <=0){
+        setTimeout(()=>{
+            hide("attack",true)
+            hide("strongAttack",true);
+            hide("dodge",true);
+            string = "YOU WON"
+            document.getElementById("notification").innerHTML = " ";
+            document.getElementById("notification").style.color = "green";
+            animateString(string,"notification",250)
+            disableStatsEnemy();
+            setTimeout(()=>{
+                reset();
+                hide("goback",false)
+                hide("explore",false)
+            },2000)
+        },2000)
+    }
 }
 
 // global and random functions (for fun)
@@ -820,3 +1108,12 @@ function reset(){
     hoursPlayed = 0;
 }
 
+/*
+function readcookies(){
+
+}
+
+function setCookie(name,data){
+    document.cookie = name + "=" + data + ";"
+}
+*/
