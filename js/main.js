@@ -1,8 +1,9 @@
 // important vars
 
 let level = 1; //player lvl
-let exp = 0; // player exp
+let exp = 19; // player exp
 let gold = 100; // money
+let expForLevelUp = 20; // how many exp a player needs for a level up
 const date = new Date(); // date
 
 let secondsPlayed = 0;
@@ -54,7 +55,7 @@ let exploring = false; // if player is exploring or not
 let menu = true; // if player is in menu
 let maxMoneyPossible = 10; // max gold a player can get in an action
 let b=false; // if exploring is from menu
-let expForLevelUp = 100; // how many exp a player needs for a level up
+
 
 
 //fight vars 
@@ -131,6 +132,8 @@ let einsatz = 0;
 
 window.onload = function() {
     
+
+
     //readcookies();
     Timeplayed = setInterval(getPlayTime, 1000);
     hide("street",true)
@@ -208,6 +211,7 @@ function goback(){
     hide("initiatAttack",true);
     tips();
     clearInterval(exploreInterval);
+
 }
 function gotorest(){
     let acvExp = 0;
@@ -387,7 +391,7 @@ function attack(){
             setTimeout(() =>{
                 enableButtons();
                 checkFight();
-            },1000)  
+            },3500)  
         },3000)
     }
     
@@ -469,6 +473,7 @@ function strongAttack(){
                     },250)
                     
                 }
+                
                 setTimeout(() =>{
                     enableButtons();
                     checkFight();
@@ -695,7 +700,7 @@ function Explore(){
         clearInterval(exploreInterval);
         hide("explore",false)
     }
-    if(happens <= 50 && happens >=30){
+    if(happens <= 51 && happens >=31){
         clearInterval(exploreInterval);
         hide("explore",false)
         hide("rest",false)
@@ -716,7 +721,7 @@ function Explore(){
         clearInterval(exploreInterval);
         hide("explore",false)
     }
-    if(happens >= 51 && happens <= 61){
+    if(happens >= 52 && happens <= 62){
         tripDamage = (Random(0,2));
         health = health - tripDamage;
         notify("tripped")
@@ -844,19 +849,16 @@ function animateString(str, outputElementId, delay) {
 function update(){
 
     //check for lvl up
-    if(exp >= expForLevelUp){
-        menu = false;
-        advance();
-        level++;
-        exp = exp - expForLevelUp;
-        expForLevelUp = expForLevelUp+(50*level);
-        notify("levelup");
-    }
+    
     // get street access if level is more than 5 
     if(level >=5 && menu == true){
         hide("street",false);
     }
-    
+    if(exp >= expForLevelUp){
+        hide("LVL_UP",false);
+    }else{
+        hide("LVL_UP",true)
+    }
 
     // Player stuff
     document.getElementById("health").innerHTML = "Health: " +health+"/"+maxHealth;
@@ -1086,6 +1088,7 @@ function checkFight(){
             setTimeout(()=>{
                 reset();
                 hide("goback",false)
+                update();
             },5000)
         },2000)
     }
@@ -1104,6 +1107,7 @@ function checkFight(){
                 hide("goback",false)
                 hide("explore",false)
                 enemyHealth = 9999999999999;
+                update();
             },4000)
         },2000)
         
@@ -1151,3 +1155,19 @@ function setCookie(name,data){
     document.cookie = name + "=" + data + ";"
 }
 */
+
+function lvlup(){
+    setTimeout(()=>{
+        if(exp >= expForLevelUp){
+            menu = false;
+            advance();
+            level++;
+            exp = exp - expForLevelUp;
+            expForLevelUp = expForLevelUp+(expForLevelUp*level);
+            notify("levelup");
+            hide("LVL_UP",true)
+            update();
+        }
+    },250)
+}
+

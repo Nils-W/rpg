@@ -75,6 +75,11 @@
         color: black;
     }
     
+    .LVLUP{
+        background-color: rgb(6, 201, 6);
+        color: rgb(255, 255, 255);
+    }
+
     button{
     /* Suggested code may be subject to a license. Learn more: ~LicenseLog:2304522102. */
         background-color: white;
