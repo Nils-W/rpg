@@ -913,6 +913,8 @@ function advance(){
     playerArmor = playerArmor + Random(0,1)*level;
     maxHealth = maxHealth + Random(5,10)*level;
     maxMana = maxMana + Random(5,10)*level;
+    health = maxHealth;
+    mana = maxMana;
 }
 
 
@@ -1074,12 +1076,18 @@ function checkFight(){
             animateString(string,"notification",250)
             disableStatsEnemy();
             setTimeout(()=>{
-                reset();
+                giveloot();
                 hide("goback",false)
                 hide("explore",false)
             },2000)
         },2000)
     }
+}
+
+
+function giveloot(){
+    gold = gold + enemyGold;
+    exp = exp + enemyExp;
 }
 
 // global and random functions (for fun)
